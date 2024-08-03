@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "527865829612",
+    "project_id": "gemini-styler",
+    "storage_bucket": "gemini-styler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527865829612:android:ac235cd9607b78ff59adc9",
+        "android_client_info": {
+          "package_name": "com.Sci3fic.gemini_styler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKq3Y7zXr-LlW7Cqy-Ej23Ole-Ex0FxUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527865829612:android:4bd051a75eb2210659adc9",
+        "android_client_info": {
+          "package_name": "com.sci3fic.geministyler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKq3Y7zXr-LlW7Cqy-Ej23Ole-Ex0FxUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
