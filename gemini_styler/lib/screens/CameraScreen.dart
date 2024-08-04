@@ -5,19 +5,21 @@ import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gemini_styler/widgets/AnimatedCompliment.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  final String promptString;
+  const CameraScreen({Key? key, required this.promptString}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
 
-const String apiKey = 'YOUR_GEMINI_API_KEY';
+String apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
 
 class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedComplimentState> _animatedComplimentKey = GlobalKey<AnimatedComplimentState>();
@@ -102,79 +104,8 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey);
 
     final firstImage = await File(imagePath).readAsBytes();
-    final prompt = TextPart('''
-You are an AI stylist. The user in this picture is asking you "How am I looking today?" Analyze the outfit in the provided image and generate a JSON response with ratings for each subtopic on a scale of 1-10. Include a UUID for the query, an overall rating for the outfit, and a compliment about the overall look. Do not provide any explanations or descriptions beyond the compliment.
-
-Return your analysis in the following JSON format:
-
-{
-  "uuid": "Generate a unique UUID for this query",
-  "gender": "Identified gender",
-  "overall_rating": "Rate the overall look of the outfit from 1-10",
-  "compliment": "Provide a catchy, sweet compliment (max 100 characters) about the overall look, using wordplay or a pun related to fashion or the occasion",
-  "occasion_appropriateness": {
-    "formal": 0,
-    "business_casual": 0,
-    "weekend": 0,
-    "interview": 0,
-    "beach": 0,
-    "special_event": 0,
-    "exercise": 0,
-    "running_errands": 0,
-    "lounging": 0
-  },
-  "climate_suitability": {
-    "hot_humid": 0,
-    "warm_sunny": 0,
-    "cool_breezy": 0,
-    "chilly": 0,
-    "freezing": 0,
-    "rainy_snowing": 0,
-    "transitional": 0
-  },
-  "body_type_flattering": {
-    "hourglass": 0,
-    "pear_shaped": 0,
-    "apple_shaped": 0,
-    "petite": 0,
-    "tall": 0,
-    "athletic": 0,
-    "curvy": 0,
-    "slender": 0,
-    "broad_shoulders": 0,
-    "wide_hips": 0
-  },
-  "style_execution": {
-    "classic": 0,
-    "minimalist": 0,
-    "bohemian": 0,
-    "edgy": 0,
-    "preppy": 0,
-    "vintage": 0,
-    "grunge": 0,
-    "streetwear": 0,
-    "glamorous": 0,
-    "romantic": 0,
-    "feminine": 0,
-    "masculine": 0
-  },
-  "color_harmony": {
-    "monochrome": 0,
-    "complementary": 0,
-    "analogous": 0,
-    "neutral_palette": 0,
-    "bold_accents": 0,
-    "patterns_prints": 0,
-    "color_blocking": 0
-  }
-}
-
-Replace all '0' values with your actual ratings from 1 to 10. Ensure that every field has a rating, even if it's not directly applicable. The 'gender' field should contain the identified gender as a string. Generate a unique UUID for each query and include it in the 'uuid' field. Provide an overall rating for the outfit in the 'overall_rating' field.
-
-For the 'compliment' field, provide a brief, catchy, and sweet compliment about the overall look of the outfit. This compliment should be memorable, using wordplay or a pun related to type of the outfit or the occasion, and should not exceed 100 characters. For example, "You're sew stylish, you've got this outfit all buttoned up!" or "Beach, please! Your seaside style is making waves!"
-
-Return only the JSON object without any additional text or explanation.
-''');    final imagePart = DataPart("image/png", firstImage);
+    final prompt = TextPart(widget.promptString);
+    final imagePart = DataPart("image/png", firstImage);
     final response = await model.generateContent([
       Content.multi([prompt, imagePart])
     ]);
@@ -233,28 +164,33 @@ Return only the JSON object without any additional text or explanation.
                     ),
                   ),
                 ),
-                SizedBox(height: 20), // Add spacing
+                Spacer(), // Add spacing
                   Visibility(
                     visible: !isAnimatingText,
                     child: Center(
-                      child: ScaleTransition(
-                        scale: _animationController,
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            shape: BoxShape.circle,
+                      child: RotationTransition(
+                        turns: Tween<double>(begin: 0, end: 1).animate(_animationController),
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 0.8, end: 1.0).animate(
+                            CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+                          ),
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage('assets/orb.png'),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                SizedBox(height: 20), // Add spacing
+                Spacer(),// Add spacing
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: AnimatedCompliment(key: _animatedComplimentKey)
                 ),
+                Spacer()
               ],
             );
           } else {
