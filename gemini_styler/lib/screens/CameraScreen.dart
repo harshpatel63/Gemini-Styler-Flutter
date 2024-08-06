@@ -4,11 +4,12 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gemini_styler/widgets/AnimatedCompliment.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:path/path.dart' show join;
+import 'package:path/path.dart' show basename, join;
 import 'package:path_provider/path_provider.dart';
 
 class CameraScreen extends StatefulWidget {
@@ -111,7 +112,7 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
     ]);
     final responseText = response.text;
     print(responseText);
-    saveOutfitRating(responseText!);
+    saveOutfitRating(imagePath, responseText!);
     Map<String, dynamic> jsonMap = json.decode(responseText!);
 
     // Extract the "compliment" field
@@ -200,7 +201,7 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
       ),
     );
   }
-  Future<void> saveOutfitRating(String jsonData) async {
+  Future<void> saveOutfitRating(String imagePath, String jsonData) async {
     try {
       // Ensure user is authenticated
       User? user = _auth.currentUser;
@@ -208,10 +209,21 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
         throw Exception('User not authenticated');
       }
 
+      // Upload image to Firebase Storage
+      File imageFile = File(imagePath);
+      String fileName = basename(imageFile.path);
+      Reference storageRef = FirebaseStorage.instance.ref().child('images/$fileName');
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Get the download URL of the uploaded image
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
       // Parse the JSON data
       Map<String, dynamic> ratingData = json.decode(jsonData);
 
       // Add timestamp and user ID to the data
+      ratingData['downloadUrl'] = downloadURL;
       ratingData['timestamp'] = FieldValue.serverTimestamp();
       ratingData['userId'] = user.uid;
 
