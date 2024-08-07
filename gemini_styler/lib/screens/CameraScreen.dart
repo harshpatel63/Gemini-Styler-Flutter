@@ -88,7 +88,7 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = join(
         directory.path,
-        'test.png',
+        '${DateTime.timestamp()}-outfit.png',
       );
 
       XFile picture = await _controller!.takePicture();

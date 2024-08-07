@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
 
 import 'CameraScreen.dart';
 
@@ -7,8 +8,9 @@ class MainScreen extends StatelessWidget {
   final User? user = FirebaseAuth.instance.currentUser;
   final String userName;
   final String prompt;
+  final String recommendationPrompt;
 
-  MainScreen({Key? key, required this.userName, required this.prompt}) : super(key: key);
+  MainScreen({Key? key, required this.userName, required this.prompt, required this.recommendationPrompt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +72,21 @@ class MainScreen extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: [
-                        _buildFeatureCard(
-                          'Chat with Bot',
-                          100,
-                          14,
-                          Icons.chat_bubble_outline,
-                          Color(0xFFE6E7FD),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt)),
+                            );
+                          },
+                          child: _buildFeatureCard(
+                            'Recommend Outfit',
+                            100,
+                            14,
+                            Icons.chat_bubble_outline,
+                            Color(0xFFE6E7FD),
+                          ),
                         ),
                         SizedBox(height: 10),
                         _buildFeatureCard(

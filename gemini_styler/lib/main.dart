@@ -64,6 +64,7 @@ class InitializationScreen extends StatefulWidget {
 class _InitializationScreenState extends State<InitializationScreen> {
   final PromptService _promptService = PromptService();
   String? _prompt;
+  String? _recommendationPrompt;
 
   @override
   void initState() {
@@ -74,6 +75,7 @@ class _InitializationScreenState extends State<InitializationScreen> {
   Future<void> _initializeApp() async {
     try {
       _prompt = await _promptService.getPrompt();
+      _recommendationPrompt = await _promptService.getRecommendationPrompt();
     } catch (e) {
       print('Error initializing app: $e');
     }
@@ -83,7 +85,12 @@ class _InitializationScreenState extends State<InitializationScreen> {
 
     if (mounted) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => MainScreen(userName: widget.userName, prompt: _prompt ?? '')),
+        MaterialPageRoute(
+            builder: (_) => MainScreen(
+                  userName: widget.userName,
+                  prompt: _prompt ?? '',
+                  recommendationPrompt: _recommendationPrompt ?? '',
+                )),
       );
     }
   }
