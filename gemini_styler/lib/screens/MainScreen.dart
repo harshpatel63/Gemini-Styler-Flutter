@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gemini_styler/screens/OutfitListScreen.dart';
 import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
 
 import 'CameraScreen.dart';
@@ -89,12 +90,21 @@ class MainScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-                        _buildFeatureCard(
-                          'Search by Image',
-                          100,
-                          14,
-                          Icons.image_search,
-                          Color(0xFFFFF0E6),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OutfitListScreen()),
+                            );
+                          },
+                          child: _buildFeatureCard(
+                            'My Closet',
+                            100,
+                            14,
+                            Icons.image_search,
+                            Color(0xFFFFF0E6),
+                          ),
                         ),
                       ],
                     ),
