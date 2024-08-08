@@ -21,8 +21,9 @@ class OutfitOfTheDay extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
             child: AspectRatio(
               aspectRatio: 3/4,
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(imageUrl),
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
               ),
             ),
           ),
