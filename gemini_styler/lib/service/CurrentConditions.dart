@@ -16,7 +16,13 @@ class CurrentConditions {
 
 Future<CurrentConditions> getCurrentConditions() async {
   // Step 1: Get location from IP address
-  final locationResponse = await http.get(Uri.parse('https://ipapi.co/json/'));
+  final locationResponse = await http.get(
+    Uri.parse('https://ipapi.co/json/'),
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+    },
+  );
+
   if (locationResponse.statusCode != 200) {
     throw Exception('Failed to get location data');
   }

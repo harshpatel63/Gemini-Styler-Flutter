@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gemini_styler/screens/OutfitOfTheDay.dart';
+import 'package:gemini_styler/service/CurrentConditions.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 import '../widgets/AnimatedCompliment.dart';
@@ -43,7 +44,7 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
     print(outfits.docs.map((doc) => doc.data()).toList());
 
     // Fetch current weather and user preferences (implement this part)
-    final currentConditions = "Rainy";
+    final currentConditions = getCurrentConditions();
 
     final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: apiKey);
 
