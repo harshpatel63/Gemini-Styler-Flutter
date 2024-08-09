@@ -21,7 +21,8 @@ class OutfitRecommendationPage extends StatefulWidget {
 String apiKey = dotenv.env['GEMINI_API_KEY'] ?? '';
 
 class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
-  String imageUrl = '';
+  String shirtImageUrl = '';
+  String pantImageUrl = '';
   String message = '';
   String prompt = '';
   final GlobalKey<AnimatedComplimentState> _animatedComplimentKey = GlobalKey<AnimatedComplimentState>();
@@ -33,15 +34,19 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
       getOutfitOfTheDay(FirebaseAuth.instance.currentUser!.uid);
   }
 
-  Future<Map<String, dynamic>> getOutfitOfTheDay(String userId) async {
+  Future<void> getOutfitOfTheDay(String userId) async {
     // Fetch user outfits from Firestore
-    final outfits = await FirebaseFirestore.instance
+    final upperOutfits = await FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
-        .collection('outfit_ratings')
+        .collection('upper_body')
         .get();
 
-    print(outfits.docs.map((doc) => doc.data()).toList());
+    final lowerOutfits = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('lower_body')
+        .get();
 
     // Fetch current weather and user preferences (implement this part)
     final currentConditions = getCurrentConditions();
@@ -50,7 +55,7 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
 
     print("${widget.recommendationPromptString}");
     final prompt = TextPart(
-        "${widget.recommendationPromptString}. Following is the data. Current Conditions in my location $currentConditions. The firebase data : ${outfits.docs.map((doc) => doc.data()).toList()}");
+        "${widget.recommendationPromptString}. Following is the data. Current Conditions in my location $currentConditions. The firebase data for upper body segment of the outfit: ${upperOutfits.docs.map((doc) => doc.data()).toList()}. The firebase data for lower body segment of the outfit: ${lowerOutfits.docs.map((doc) => doc.data()).toList()}");
     final response = await model.generateContent([
       Content.multi([prompt])
     ]);
@@ -62,19 +67,23 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
     final outfitRecommendation = json.decode(responseText!);
 
     setState(() {
-      message = outfitRecommendation["reason"];
-      imageUrl = outfitRecommendation["downloadUrl"];
+      shirtImageUrl = outfitRecommendation["upper_body"]["downloadUrl"];
+      pantImageUrl = outfitRecommendation["lower_body"]["downloadUrl"];
+      message = outfitRecommendation["compliment_or_advice"];
       _animatedComplimentKey.currentState?.setCompliment(message);
     });
-
-    return outfitRecommendation;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Outfit of the Day')),
-      body: OutfitOfTheDay(imageUrl: imageUrl, message: message, animatedComplimentKey: _animatedComplimentKey,),
+      body: OutfitOfTheDay(
+        shirtImageUrl: shirtImageUrl,
+        pantImageUrl: pantImageUrl,
+        complimentOrAdvice: message,
+        animatedComplimentKey: _animatedComplimentKey,
+      ),
     );
   }
 }

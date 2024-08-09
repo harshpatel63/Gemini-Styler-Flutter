@@ -116,7 +116,7 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
     Map<String, dynamic> jsonMap = json.decode(responseText!);
 
     // Extract the "compliment" field
-    final compliment = jsonMap['compliment'];
+    final compliment = jsonMap['compliment_or_advice'];
     setState(() {
       apiResponseText = compliment;
       _animationController.stop();
@@ -223,17 +223,28 @@ class _CameraScreenState extends State<CameraScreen> with SingleTickerProviderSt
       Map<String, dynamic> ratingData = json.decode(jsonData);
 
       // Add timestamp and user ID to the data
-      ratingData['downloadUrl'] = downloadURL;
-      ratingData['timestamp'] = FieldValue.serverTimestamp();
-      ratingData['userId'] = user.uid;
+      ratingData['upper_body']['downloadUrl'] = downloadURL;
+      ratingData['upper_body']['timestamp'] = FieldValue.serverTimestamp();
+      ratingData['upper_body']['userId'] = user.uid;
+
+      ratingData['lower_body']['downloadUrl'] = downloadURL;
+      ratingData['lower_body']['timestamp'] = FieldValue.serverTimestamp();
+      ratingData['lower_body']['userId'] = user.uid;
 
       // Save the data to Firestore
       await _firestore
           .collection('users')
           .doc(user.uid)
-          .collection('outfit_ratings')
+          .collection('upper_body')
           .doc(ratingData['uuid'])
-          .set(ratingData);
+          .set(ratingData['upper_body']);
+
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('lower_body')
+          .doc(ratingData['uuid'])
+          .set(ratingData['lower_body']);
 
       print('Outfit rating saved successfully');
     } catch (e) {
