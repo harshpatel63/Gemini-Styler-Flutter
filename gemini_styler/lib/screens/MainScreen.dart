@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gemini_styler/screens/AIBuddyScreen.dart';
 import 'package:gemini_styler/screens/OutfitListScreen.dart';
 import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
 
@@ -126,10 +127,19 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16),
-              _buildHistoryItem(
-                'I need to dress up for a special event...',
-                Icons.mic,
-                Color(0xFFE7F9E6),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AIBuddyScreen()),
+                  );
+                },
+                child: _buildHistoryItem(
+                  'I need to dress up for a special event...',
+                  Icons.mic,
+                  Color(0xFFE7F9E6),
+                ),
               ),
               SizedBox(height: 12),
               _buildHistoryItem(
