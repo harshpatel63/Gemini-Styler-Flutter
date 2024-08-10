@@ -51,7 +51,6 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
           children: [
@@ -124,7 +123,7 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
         SizedBox(height: 40),
         Text(
           _text.isNotEmpty ? _text : 'Tap the mic to start speaking',
-          style: TextStyle(color: Colors.white, fontSize: 18),
+          style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
       ],
@@ -138,7 +137,7 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            icon: Icon(Icons.chat_bubble_outline, color: Colors.grey),
+            icon: Icon(Icons.keyboard, color: Colors.grey),
             onPressed: () {},
           ),
           GestureDetector(
@@ -155,8 +154,12 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
             ),
           ),
           IconButton(
-            icon: Icon(Icons.close, color: Colors.grey),
-            onPressed: () {},
+            icon: Icon(Icons.loop, color: Colors.grey),
+            onPressed: () {
+              setState(() {
+                _text = 'Tap the mic to start speaking';
+              });
+            },
           ),
         ],
       ),
@@ -187,6 +190,9 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
 
   void _stopListening() {
     if (_isListening) {
+      setState(() {
+        _text = capitalizeFirstLetter(_text);
+      });
       _speech.stop();
       _animationController.duration = Duration(seconds: 5);
       _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(_animationController);
@@ -209,4 +215,10 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
     PromptService promptService = PromptService();
     recommendationPrompt = await promptService.getRecommendationPrompt();
   }
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
+
 }

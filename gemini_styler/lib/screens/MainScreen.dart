@@ -12,18 +12,18 @@ class MainScreen extends StatelessWidget {
   final String userName;
   final String prompt;
   final String recommendationPrompt;
+  bool isDarkMode = false;
 
   MainScreen({Key? key, required this.userName, required this.prompt, required this.recommendationPrompt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.black),
+          icon: Icon(Icons.menu),
           onPressed: () {},
         ),
         actions: [
@@ -204,7 +204,7 @@ class MainScreen extends StatelessWidget {
           Spacer(),
           Text(
             title,
-            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ],
       ),
@@ -215,7 +215,7 @@ class MainScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: Colors.grey[isDarkMode ? 900 : 100],
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -226,17 +226,17 @@ class MainScreen extends StatelessWidget {
               color: bgColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 20),
+            child: Icon(icon, size: 20, color: Colors.black,),
           ),
           SizedBox(width: 12),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 14, color: isDarkMode ? Colors.white : Colors.black),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Icon(Icons.more_vert),
+          // Icon(Icons.more_vert, color: Colors.black,),
         ],
       ),
     );

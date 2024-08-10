@@ -18,22 +18,16 @@ class OutfitOfTheDay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'You should wear this TODAY!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
           ),
           Expanded(
             child: Container(
               width: double.infinity,
               margin: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Column(

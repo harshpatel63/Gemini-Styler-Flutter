@@ -22,18 +22,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Gemini Styler',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-      ),
+      theme: lightTheme, // Light theme
+      darkTheme: darkTheme, // Dark theme
+      themeMode: ThemeMode.system,
       home: AuthWrapper(),
     );
   }
+
+  ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: Colors.blue,
+
+    // other light theme settings
+  );
+
+  ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Colors.teal,
+    // other dark theme settings
+  );
+
 }
 
 class AuthWrapper extends StatelessWidget {
