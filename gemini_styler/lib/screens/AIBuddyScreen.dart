@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
+import '../service/PromptService.dart';
+import 'OutfitRecommendationPage.dart';
+
 class AIBuddyScreen extends StatefulWidget {
   @override
   _AIBuddyScreenState createState() => _AIBuddyScreenState();
@@ -17,9 +20,12 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
   bool _isListening = false;
   String _text = '';
 
+  String recommendationPrompt = "";
+
   @override
   void initState() {
     super.initState();
+    fetchRecommendationPrompt();
     _animationController = AnimationController(
       duration: Duration(seconds: 5),
       vsync: this,
@@ -169,6 +175,7 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
         _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(_animationController);
         _rotationAnimation = Tween<double>(begin: 0, end: 1).animate(_animationController);
         await _flutterTts.speak("Listening");
+        await Future.delayed(Duration(seconds: 1));
         _speech.listen(
           onResult: (result) => setState(() {
             _text = result.recognizedWords;
@@ -185,6 +192,21 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
       _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(_animationController);
       _rotationAnimation = Tween<double>(begin: 0, end: 0.1).animate(_animationController);
       setState(() => _isListening = false);
+      changeScreen();
     }
+  }
+
+  void changeScreen() async {
+    await Future.delayed(Duration(seconds: 1));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: recommendationPrompt,)),
+    );
+  }
+
+  void fetchRecommendationPrompt() async {
+    PromptService promptService = PromptService();
+    recommendationPrompt = await promptService.getRecommendationPrompt();
   }
 }

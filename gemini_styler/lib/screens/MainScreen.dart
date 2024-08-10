@@ -79,7 +79,7 @@ class MainScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt)),
+                                  builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "",)),
                             );
                           },
                           child: _buildFeatureCard(

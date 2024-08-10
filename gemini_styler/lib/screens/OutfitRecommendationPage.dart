@@ -11,8 +11,9 @@ import '../widgets/AnimatedCompliment.dart';
 
 class OutfitRecommendationPage extends StatefulWidget {
   final String recommendationPromptString;
+  final String extraInputCommand;
 
-  const OutfitRecommendationPage({Key? key, required this.recommendationPromptString}) : super(key: key);
+  const OutfitRecommendationPage({Key? key, required this.recommendationPromptString, required this.extraInputCommand}) : super(key: key);
 
   @override
   _OutfitRecommendationPageState createState() => _OutfitRecommendationPageState();
@@ -55,9 +56,16 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> {
 
     print("${widget.recommendationPromptString}");
     final prompt = TextPart(
-        "${widget.recommendationPromptString}. Following is the data. Current Conditions in my location $currentConditions. The firebase data for upper body segment of the outfit: ${upperOutfits.docs.map((doc) => doc.data()).toList()}. The firebase data for lower body segment of the outfit: ${lowerOutfits.docs.map((doc) => doc.data()).toList()}");
+            "${widget.recommendationPromptString}"
+            "And more instructions are as follows: ${widget.extraInputCommand}"
+            "Current Conditions in my location $currentConditions."
+            "The firebase data for upper body segment of the outfit: ${upperOutfits.docs.map((doc) => doc.data()).toList()}. The firebase data for lower body segment of the outfit: ${lowerOutfits.docs.map((doc) => doc.data()).toList()}"
+            );
+
     final response = await model.generateContent([
-      Content.multi([prompt])
+      Content.multi([
+        prompt
+      ])
     ]);
     final responseText = response.text;
 
