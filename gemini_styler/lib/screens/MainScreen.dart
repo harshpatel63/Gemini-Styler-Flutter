@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gemini_styler/screens/AIBuddyScreen.dart';
 import 'package:gemini_styler/screens/OutfitListScreen.dart';
@@ -104,7 +105,7 @@ class MainScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OutfitListScreen()),
+                                  builder: (context) => AIBuddyScreen()),
                             );
                           },
                           child: _buildFeatureCard(
@@ -140,7 +141,7 @@ class MainScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AIBuddyScreen()),
+                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "I need to dress up for a special event")),
                   );
                 },
                 child: _buildHistoryItem(
@@ -150,16 +151,34 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12),
-              _buildHistoryItem(
-                'Suggest daily outfit...',
-                Icons.chat_bubble_outline,
-                isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "Suggest daily outfit")),
+                  );
+                },
+                child: _buildHistoryItem(
+                  'Suggest daily outfit...',
+                  Icons.chat_bubble_outline,
+                  isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
+                ),
               ),
               SizedBox(height: 12),
-              _buildHistoryItem(
-                'Which outfit is best for an interview...',
-                Icons.image_search,
-                isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "Which outfit is best for an interview")),
+                  );
+                },
+                child: _buildHistoryItem(
+                  'Which outfit is best for an interview...',
+                  Icons.image_search,
+                  isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
+                ),
               ),
             ],
           ),
@@ -197,7 +216,7 @@ class MainScreen extends StatelessWidget {
               Spacer(),
               Align(
                 alignment: Alignment.topRight,
-                child: Icon(Icons.arrow_forward, color: Colors.black54),
+                child: Icon(CupertinoIcons.arrow_up_right, color: Colors.black54),
               ),
             ],
           ),
