@@ -43,7 +43,11 @@ class AuthWrapper extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return InitializationScreen(userName: snapshot.data?.displayName ?? 'User');
+          return InitializationScreen(
+            userName: (snapshot.data?.displayName?.trim().isNotEmpty ?? false)
+                ? snapshot.data!.displayName!
+                : (snapshot.data?.email?.split('@')[0] ?? 'Hoooman'),
+          );
         } else {
           return const LoginScreen();
         }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gemini_styler/screens/AIBuddyScreen.dart';
 import 'package:gemini_styler/screens/OutfitListScreen.dart';
 import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
+import 'package:text_gradiate/text_gradiate.dart';
 
 import 'CameraScreen.dart';
 
@@ -40,9 +41,16 @@ class MainScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Hi, $userName 👋',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              TextGradiate(
+                text: Text(
+                  'Hello, ${capitalizeFirstLetter(userName)}',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                colors: [Color(0xff4c7de5), Color(0xffd36678)],
+                gradientType: GradientType.linear,
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                tileMode: TileMode.clamp,
               ),
               SizedBox(height: 16),
               Text(
@@ -233,4 +241,10 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
+  
 }
