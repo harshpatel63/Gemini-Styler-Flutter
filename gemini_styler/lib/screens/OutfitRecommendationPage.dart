@@ -141,7 +141,7 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> wit
           ),
           SizedBox(height: 20),
           Text(
-            "AI is generating your recommendation...",
+            "Our AI is crafting your perfect look...",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],
