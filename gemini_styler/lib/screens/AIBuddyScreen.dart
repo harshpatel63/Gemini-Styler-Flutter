@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -137,7 +139,7 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            icon: Icon(Icons.keyboard, color: Colors.grey),
+            icon: Icon(FontAwesomeIcons.keyboard, color: Colors.grey),
             onPressed: () {},
           ),
           GestureDetector(
@@ -150,11 +152,11 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
                 color: Color(0xFFC6F432),
                 shape: BoxShape.circle,
               ),
-              child: Icon(Icons.mic, color: Colors.black),
+              child: Icon(FontAwesomeIcons.microphone, color: Colors.black),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.loop, color: Colors.grey),
+            icon: Icon(CupertinoIcons.restart, color: Colors.grey),
             onPressed: () {
               setState(() {
                 _text = 'Tap the mic to start speaking';
