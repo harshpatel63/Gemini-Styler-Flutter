@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gemini_styler/screens/AIBuddyScreen.dart';
 import 'package:gemini_styler/screens/OutfitListScreen.dart';
 import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
@@ -136,49 +137,25 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "I need to dress up for a special event")),
-                  );
-                },
-                child: _buildHistoryItem(
-                  'I need to dress up for a special event...',
-                  Icons.mic,
+              _buildHistoryItem(
+                  context,
+                  'I need to dress up for my office',
+                  FontAwesomeIcons.building,
                   isDarkMode? Color(0xFFC6F432) : Color(0xFFE7F9E6),
                 ),
+              SizedBox(height: 12),
+              _buildHistoryItem(
+                context,
+                'Suggest outfit for this weekend',
+                Icons.weekend,
+                isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
               ),
               SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "Suggest daily outfit")),
-                  );
-                },
-                child: _buildHistoryItem(
-                  'Suggest daily outfit...',
-                  Icons.chat_bubble_outline,
-                  isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
-                ),
-              ),
-              SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "Which outfit is best for an interview")),
-                  );
-                },
-                child: _buildHistoryItem(
-                  'Which outfit is best for an interview...',
-                  Icons.image_search,
-                  isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
-                ),
+              _buildHistoryItem(
+                context,
+                'Get me quick meeting outfits',
+                Icons.label_important,
+                isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
               ),
             ],
           ),
@@ -230,33 +207,42 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryItem(String text, IconData icon, Color bgColor) {
-    return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[isDarkMode ? 900 : 100],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: bgColor,
-              shape: BoxShape.circle,
+  Widget _buildHistoryItem(BuildContext context, String text, IconData icon, Color bgColor) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: text)),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey[isDarkMode ? 900 : 100],
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: bgColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 20, color: Colors.black,),
             ),
-            child: Icon(icon, size: 20, color: Colors.black,),
-          ),
-          SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 14, color: isDarkMode ? Colors.white : Colors.black),
-              overflow: TextOverflow.ellipsis,
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 14, color: isDarkMode ? Colors.white : Colors.black),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
-          // Icon(Icons.more_vert, color: Colors.black,),
-        ],
+            // Icon(Icons.more_vert, color: Colors.black,),
+          ],
+        ),
       ),
     );
   }
