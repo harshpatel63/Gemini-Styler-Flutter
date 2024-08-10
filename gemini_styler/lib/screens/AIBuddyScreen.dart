@@ -146,21 +146,19 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
             onTapDown: (_) => _startListening(),
             onTapUp: (_) => _stopListening(),
             child: Container(
-              width: 60,
-              height: 60,
+              width: 90,
+              height: 90,
               decoration: BoxDecoration(
                 color: Color(0xFFC6F432),
                 shape: BoxShape.circle,
               ),
-              child: Icon(FontAwesomeIcons.microphone, color: Colors.black),
+              child: Icon(FontAwesomeIcons.microphone, color: Colors.black, size: 40,),
             ),
           ),
           IconButton(
-            icon: Icon(CupertinoIcons.restart, color: Colors.grey),
+            icon: Icon(Icons.close, color: Colors.grey),
             onPressed: () {
-              setState(() {
-                _text = 'Tap the mic to start speaking';
-              });
+              Navigator.pop(context);
             },
           ),
         ],
