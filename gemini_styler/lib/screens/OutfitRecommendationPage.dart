@@ -27,6 +27,7 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> wit
   String message = '';
   String prompt = '';
   bool isLoading = true;
+  bool isRecommendationAvailable = true;
   final GlobalKey<AnimatedComplimentState> _animatedComplimentKey = GlobalKey<AnimatedComplimentState>();
 
   late AnimationController _orbAnimationController;
@@ -70,6 +71,13 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> wit
         .doc(userId)
         .collection('lower_body')
         .get();
+
+    if(upperOutfits.size + lowerOutfits.size < 8) {
+      setState(() {
+        isRecommendationAvailable = false;
+      });
+      return;
+    }
 
     // Fetch current weather and user preferences (implement this part)
     final currentConditions = getCurrentConditions();
@@ -141,7 +149,7 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> wit
           ),
           SizedBox(height: 20),
           Text(
-            "Our AI is crafting your perfect look...",
+            isRecommendationAvailable ? "Our AI is crafting your perfect look..." : "You need to add more outfits, head over to Fit Check.",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ],

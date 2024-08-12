@@ -179,7 +179,7 @@ class MainScreen extends StatelessWidget {
               SizedBox(height: 12),
               _buildHistoryItem(
                 context,
-                'Outfit suggestions for date',
+                'Outfit suggestions for a dinner date',
                 Icons.dining,
                 Color(0xFFC4E1FE),
               ),
