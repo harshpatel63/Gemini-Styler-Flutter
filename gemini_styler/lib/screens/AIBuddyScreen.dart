@@ -24,6 +24,8 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
 
   String recommendationPrompt = "";
 
+  String defaultText = 'Hold the mic to start speaking';
+
   @override
   void initState() {
     super.initState();
@@ -124,7 +126,7 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
         ),
         SizedBox(height: 40),
         Text(
-          _text.isNotEmpty ? _text : 'Tap the mic to start speaking',
+          _text.isNotEmpty ? _text : defaultText,
           style: TextStyle(fontSize: 18),
           textAlign: TextAlign.center,
         ),
@@ -198,16 +200,18 @@ class _AIBuddyScreenState extends State<AIBuddyScreen> with SingleTickerProvider
       _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(_animationController);
       _rotationAnimation = Tween<double>(begin: 0, end: 0.1).animate(_animationController);
       setState(() => _isListening = false);
-      changeScreen();
+      if(_text.trim().isNotEmpty) {
+        routeToRecommendationScreen();
+      }
     }
   }
 
-  void changeScreen() async {
+  void routeToRecommendationScreen() async {
     await Future.delayed(Duration(seconds: 1));
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: recommendationPrompt,)),
+          builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: _text,)),
     );
   }
 
