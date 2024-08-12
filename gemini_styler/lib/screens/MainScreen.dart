@@ -19,7 +19,12 @@ class MainScreen extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  MainScreen({Key? key, required this.userName, required this.prompt, required this.recommendationPrompt}) : super(key: key);
+  MainScreen(
+      {Key? key,
+      required this.userName,
+      required this.prompt,
+      required this.recommendationPrompt})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +80,8 @@ class MainScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CameraScreen(promptString: prompt)),
+                              builder: (context) =>
+                                  CameraScreen(promptString: prompt)),
                         );
                       },
                       child: _buildFeatureCard(
@@ -96,7 +102,12 @@ class MainScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: "",)),
+                                  builder: (context) =>
+                                      OutfitRecommendationPage(
+                                        recommendationPromptString:
+                                            recommendationPrompt,
+                                        extraInputCommand: "",
+                                      )),
                             );
                           },
                           child: _buildFeatureCard(
@@ -137,19 +148,20 @@ class MainScreen extends StatelessWidget {
                     'AI suggestions',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text('See all'),
-                  ),
+                  // TextButton(
+                  //   onPressed: () {
+                  //   },
+                  //   child: Text('See all'),
+                  // ),
                 ],
               ),
               SizedBox(height: 16),
               _buildHistoryItem(
-                  context,
-                  'I need to dress up for my office',
-                  FontAwesomeIcons.building,
-                  Color(0xFFC6F432),
-                ),
+                context,
+                'I need to dress up for my office',
+                FontAwesomeIcons.building,
+                Color(0xFFC6F432),
+              ),
               SizedBox(height: 12),
               _buildHistoryItem(
                 context,
@@ -164,6 +176,20 @@ class MainScreen extends StatelessWidget {
                 Icons.label_important,
                 Color(0xFFFEC4DD),
               ),
+              SizedBox(height: 12),
+              _buildHistoryItem(
+                context,
+                'Outfit suggestions for date',
+                Icons.dining,
+                Color(0xFFC4E1FE),
+              ),
+              SizedBox(height: 12),
+              _buildHistoryItem(
+                context,
+                'A comfortable home outfit',
+                Icons.home,
+                Color(0xFEC4C4FF),
+              ),
             ],
           ),
         ),
@@ -173,8 +199,7 @@ class MainScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
-              ),
+              decoration: BoxDecoration(),
               child: Text(
                 'Gemini Styler',
                 style: TextStyle(
@@ -195,7 +220,8 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureCard(String title, double h, double fontSize, IconData icon, Color bgColor) {
+  Widget _buildFeatureCard(
+      String title, double h, double fontSize, IconData icon, Color bgColor) {
     return Container(
       height: h,
       padding: EdgeInsets.all(16),
@@ -209,7 +235,7 @@ class MainScreen extends StatelessWidget {
           Row(
             children: [
               Align(
-                alignment: Alignment.topLeft,
+                  alignment: Alignment.topLeft,
                   child: Container(
                       decoration: BoxDecoration(
                         color: Color(0x22000000),
@@ -218,33 +244,38 @@ class MainScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(6),
                         child: Icon(icon, color: Colors.black, size: 24),
-                      )
-                  )
-              ),
+                      ))),
               Spacer(),
               Align(
                 alignment: Alignment.topRight,
-                child: Icon(CupertinoIcons.arrow_up_right, color: Colors.black54),
+                child:
+                    Icon(CupertinoIcons.arrow_up_right, color: Colors.black54),
               ),
             ],
           ),
           Spacer(),
           Text(
             title,
-            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.black),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, String text, IconData icon, Color bgColor) {
+  Widget _buildHistoryItem(
+      BuildContext context, String text, IconData icon, Color bgColor) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => OutfitRecommendationPage(recommendationPromptString: recommendationPrompt, extraInputCommand: text)),
+              builder: (context) => OutfitRecommendationPage(
+                  recommendationPromptString: recommendationPrompt,
+                  extraInputCommand: text)),
         );
       },
       child: Container(
@@ -261,13 +292,19 @@ class MainScreen extends StatelessWidget {
                 color: bgColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 20, color: Colors.black,),
+              child: Icon(
+                icon,
+                size: 20,
+                color: Colors.black,
+              ),
             ),
             SizedBox(width: 12),
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(fontSize: 14, color: isDarkMode ? Colors.white : Colors.black),
+                style: TextStyle(
+                    fontSize: 14,
+                    color: isDarkMode ? Colors.white : Colors.black),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -287,8 +324,7 @@ class MainScreen extends StatelessWidget {
     await FirebaseAuth.instance.signOut();
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const LoginScreen()),
-    );  }
-  
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
 }
