@@ -71,34 +71,34 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),
-            // TextField(
-            //   controller: _emailController,
-            //   decoration: InputDecoration(
-            //     labelText: 'Email',
-            //     border: OutlineInputBorder(),
-            //   ),
-            // ),
-            // SizedBox(height: 16.0),
-            // TextField(
-            //   controller: _passwordController,
-            //   decoration: InputDecoration(
-            //     labelText: 'Password',
-            //     border: OutlineInputBorder(),
-            //   ),
-            //   obscureText: true,
-            // ),
-            // SizedBox(height: 16.0),
-            // if (_errorMessage != null)
-            //   Text(
-            //     _errorMessage!,
-            //     style: TextStyle(color: Colors.red),
-            //   ),
-            // SizedBox(height: 16.0),
-            // ElevatedButton(
-            //   child: Text('Sign in with Email'),
-            //   onPressed: signInWithEmailPassword,
-            // ),
-            // SizedBox(height: 16.0),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            SizedBox(height: 16.0),
+            if (_errorMessage != null)
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              child: Text('Sign in with Email'),
+              onPressed: signInWithEmailPassword,
+            ),
+            SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: signInWithGoogle,
               style: ElevatedButton.styleFrom(
