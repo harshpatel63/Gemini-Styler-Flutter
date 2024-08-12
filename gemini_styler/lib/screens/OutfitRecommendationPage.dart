@@ -148,9 +148,13 @@ class _OutfitRecommendationPageState extends State<OutfitRecommendationPage> wit
             },
           ),
           SizedBox(height: 20),
-          Text(
-            isRecommendationAvailable ? "Our AI is crafting your perfect look..." : "You need to add more outfits, head over to Fit Check.",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              isRecommendationAvailable ? "Our AI is crafting your perfect look..." : "You need minimum 4 outfits added.\n Head over to Fit Check.",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           ),
         ],
       ),

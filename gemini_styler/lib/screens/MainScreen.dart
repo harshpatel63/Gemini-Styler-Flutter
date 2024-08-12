@@ -44,7 +44,7 @@ class MainScreen extends StatelessWidget {
           CircleAvatar(
             backgroundImage: user?.photoURL != null
                 ? NetworkImage(user!.photoURL!)
-                : AssetImage('assets/profile_photo.png') as ImageProvider,
+                : AssetImage('assets/app_icon.png') as ImageProvider,
           ),
           SizedBox(width: 16),
         ],
