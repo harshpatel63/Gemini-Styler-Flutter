@@ -1,49 +1,89 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'dart:async';
 
-class FashionSplashScreen extends StatelessWidget {
+class FashionSplashScreen extends StatefulWidget {
   final VoidCallback onInitializationComplete;
 
   const FashionSplashScreen({Key? key, required this.onInitializationComplete}) : super(key: key);
 
   @override
+  _FashionSplashScreenState createState() => _FashionSplashScreenState();
+}
+
+class _FashionSplashScreenState extends State<FashionSplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  int _currentEmojiIndex = 0;
+  final List<String> _emojis = ['👗', '👠', '👜', '💄', '👒', '🕶️', '💍', '⌚'];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    )..repeat(reverse: true);
+
+    // Change emoji every second
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          _currentEmojiIndex = (_currentEmojiIndex + 1) % _emojis.length;
+        });
+      }
+    });
+
+    // Trigger onInitializationComplete after 5 seconds
+    Future.delayed(Duration(seconds: 5), widget.onInitializationComplete);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.purple[100],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Animated hanger icon
-            TweenAnimationBuilder(
-              duration: Duration(seconds: 2),
-              tween: Tween<double>(begin: 0, end: 1),
-              builder: (context, double value, child) {
-                return Transform.scale(
-                  scale: value,
-                  child: Icon(Icons.camera_alt_rounded, size: 100, color: Colors.purple),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            // Animated text
-            AnimatedTextKit(
-              animatedTexts: [
-                TypewriterAnimatedText(
-                  'Gemini Styler',
-                  textAlign: TextAlign.center,
-                  textStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.purple[800],
-                  ),
-                  speed: Duration(milliseconds: 100),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.purple[100]!, Colors.pink[100]!],
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Animated emoji
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: 1.0 + (_controller.value * 0.2),
+                    child: Text(
+                      _emojis[_currentEmojiIndex],
+                      style: TextStyle(fontSize: 80),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 40),
+              // App name
+              Text(
+                'Gemini Styler',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple[800],
+                  letterSpacing: 2,
                 ),
-              ],
-              totalRepeatCount: 1,
-              onFinished: onInitializationComplete,
-            ),
-          ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
