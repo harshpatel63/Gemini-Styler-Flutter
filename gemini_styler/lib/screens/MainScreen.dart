@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gemini_styler/screens/AIBuddyScreen.dart';
+import 'package:gemini_styler/screens/LoginScreen.dart';
 import 'package:gemini_styler/screens/OutfitListScreen.dart';
 import 'package:gemini_styler/screens/OutfitRecommendationPage.dart';
 import 'package:text_gradiate/text_gradiate.dart';
@@ -16,17 +17,23 @@ class MainScreen extends StatelessWidget {
   final String recommendationPrompt;
   bool isDarkMode = false;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   MainScreen({Key? key, required this.userName, required this.prompt, required this.recommendationPrompt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.menu),
-          onPressed: () {},
+          onPressed: () {
+            // Scaffold.of(context).openDrawer();
+            _scaffoldKey.currentState?.openDrawer();
+          },
         ),
         actions: [
           CircleAvatar(
@@ -76,7 +83,7 @@ class MainScreen extends StatelessWidget {
                         200,
                         30,
                         Icons.camera,
-                        isDarkMode? Color(0xFFC6F432) : Color(0xFFE7F9E6),
+                        Color(0xFFC6F432),
                       ),
                     ),
                   ),
@@ -97,7 +104,7 @@ class MainScreen extends StatelessWidget {
                             100,
                             14,
                             Icons.recommend,
-                            isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
+                            Color(0xFFC09FF8),
                           ),
                         ),
                         SizedBox(height: 10),
@@ -114,7 +121,7 @@ class MainScreen extends StatelessWidget {
                             100,
                             14,
                             Icons.mic,
-                            isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
+                            Color(0xFFFEC4DD),
                           ),
                         ),
                       ],
@@ -141,24 +148,48 @@ class MainScreen extends StatelessWidget {
                   context,
                   'I need to dress up for my office',
                   FontAwesomeIcons.building,
-                  isDarkMode? Color(0xFFC6F432) : Color(0xFFE7F9E6),
+                  Color(0xFFC6F432),
                 ),
               SizedBox(height: 12),
               _buildHistoryItem(
                 context,
                 'Suggest outfit for this weekend',
                 Icons.weekend,
-                isDarkMode ? Color(0xFFC09FF8) : Color(0xFFE6E7FD),
+                Color(0xFFC09FF8),
               ),
               SizedBox(height: 12),
               _buildHistoryItem(
                 context,
                 'Get me quick meeting outfits',
                 Icons.label_important,
-                isDarkMode ? Color(0xFFFEC4DD) : Color(0xFFFFF0E6),
+                Color(0xFFFEC4DD),
               ),
             ],
           ),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+              ),
+              child: Text(
+                'Gemini Styler',
+                style: TextStyle(
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_outlined),
+              title: Text('Logout'),
+              onTap: () {
+                _logout(context);
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -251,5 +282,13 @@ class MainScreen extends StatelessWidget {
     if (text.isEmpty) return text;
     return text[0].toUpperCase() + text.substring(1).toLowerCase();
   }
+
+  Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const LoginScreen()),
+    );  }
   
 }
