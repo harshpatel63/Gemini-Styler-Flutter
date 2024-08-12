@@ -322,9 +322,10 @@ class MainScreen extends StatelessWidget {
 
   Future<void> _logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.push(
+    Navigator.pushAndRemoveUntil (
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (Route<dynamic> route) => false,
     );
   }
 }
